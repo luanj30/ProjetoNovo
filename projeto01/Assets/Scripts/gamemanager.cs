@@ -4,9 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState
+{
+    Start,
+    Playing,
+    GameOver,
+    Victory,
+    Ending
+}
+
 public class gamemanager : MonoBehaviour
 {
     public static gamemanager Instance;
+    
+    public GameState gameState;
     
     [SerializeField]
     private GameObject playerAndCameraPrefeb;
@@ -47,6 +58,7 @@ public class gamemanager : MonoBehaviour
         Vector3 starPosition = GameObject.Find("playerstart").transform.position;
 
         Instantiate(playerAndCameraPrefeb, starPosition, Quaternion.identity);
+        gameState = GameState.Playing;
     }
 
     // Start is called before the first frame update
@@ -58,6 +70,8 @@ public class gamemanager : MonoBehaviour
     public void LoadMenu()
     {
         SceneManager.LoadScene("MainMenu");
+        
+        
     }
     
     public void StartGame()
@@ -87,16 +101,19 @@ public class gamemanager : MonoBehaviour
     public void CallVictory()
     {
         SceneManager.LoadScene("Victory", LoadSceneMode.Additive);
+        gameState = GameState.Victory;
     }
     
     public void CallGameOver()
     {
         SceneManager.LoadScene("GameOver", LoadSceneMode.Additive);
+        gameState = GameState.GameOver;
     }
     
     public void LoadEnding()
     {
         SceneManager.LoadScene("Ending");
+        gameState = GameState.Ending;
     }
 
    

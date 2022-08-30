@@ -15,7 +15,7 @@ public class GameOverController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.anyKey.isPressed)
+        if (Keyboard.current.anyKey.wasPressedThisFrame)
         {
             Time.timeScale = 1f;
             gamemanager.Instance.LoadMenu();

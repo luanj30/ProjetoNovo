@@ -156,10 +156,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95a74cf24f1718f41a317c2d8a0593fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  netime: 20
   coninText: {fileID: 0}
   coins: 0
+  cylinders: 0
+  cylinderText: {fileID: 0}
   moveSpeed: 1000
-  maxVelocity: 10
+  maxVelocity: 8
   rayDistance: 0.75
   groundLayer:
     serializedVersion: 2

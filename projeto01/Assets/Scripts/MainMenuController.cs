@@ -10,7 +10,7 @@ public class MainMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.anyKey.isPressed)
+        if (Keyboard.current.anyKey.wasPressedThisFrame)
         {
             gamemanager.Instance.StartGame();
         }

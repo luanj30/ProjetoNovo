@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class playercontroller : MonoBehaviour
 {
+    public float netime;
     public TMP_Text coninText;
     public int coins = 0;
     public int cylinders = 0;
@@ -27,6 +28,13 @@ public class playercontroller : MonoBehaviour
     private Vector2 _moveInput;
 
     private bool _isGrounded;
+
+    private float _timeRemaining;
+
+    private void Start()
+    {
+        _timeRemaining = netime;
+    }
 
     private void OnEnable()
     {
@@ -116,6 +124,8 @@ public class playercontroller : MonoBehaviour
 
     private void Update()
     {
+        _timeRemaining -= Time.deltaTime;
+        checkGameover();
         CheckGround();
     }
 
@@ -131,17 +141,43 @@ public class playercontroller : MonoBehaviour
             coins++;
             PayerObserverManeger.PlayerCoinsChanged(coins);
             Destroy(other.gameObject);
+            
         }
         if (other.CompareTag("cylinder"))
         {
             cylinders++;
             PayerObserverManeger.PlayercylinderChanged(cylinders);
             Destroy(other.gameObject);
+            CheckVictory();
         }
         
         
 
 
+    }
+
+    private void CheckVictory()
+    {
+        if (cylinders >= 5) 
+        {
+            if (gamemanager.Instance.gameState != GameState.Victory)
+            {
+                gamemanager.Instance.CallVictory();  
+            }
+        }
+      
+    }
+
+    private void checkGameover()
+    {
+        if (_timeRemaining <= 0)
+        {
+            if(gamemanager.Instance.gameState != GameState.GameOver)
+            {
+                //gamemanager.Instance.CallGameOver();
+                gamemanager.Instance.LoadEnding();
+            }
+        }
     }
 
    
