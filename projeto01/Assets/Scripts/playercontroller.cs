@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class playercontroller : MonoBehaviour
 {
-   
+    public int maxHealth = 100;
     public TMP_Text coninText;
     public int coins = 0;
     public int cylinders = 0;
@@ -29,6 +29,8 @@ public class playercontroller : MonoBehaviour
 
     private bool _isGrounded;
 
+    private int _currentHealth;
+
 
 
     
@@ -48,7 +50,7 @@ public class playercontroller : MonoBehaviour
         //atribuindo ao delegate do action triggered no player
         _playerInput.onActionTriggered += OnActionTriggered;
         
-        
+        _currentHealth = maxHealth;
     }
 
     private void OnDisable()
@@ -70,6 +72,8 @@ public class playercontroller : MonoBehaviour
         {
             if (obj.performed) Jamp();
         }
+
+      
 
     }
 
@@ -135,6 +139,12 @@ public class playercontroller : MonoBehaviour
             Destroy(other.gameObject);
             
         }
+
+        if (other.CompareTag("finishcube"))
+        {
+            Debug.Log(message:"entrei");
+            gamemanager.Instance.PlayerReachfinishcube();
+        }
         
         
         
@@ -142,6 +152,27 @@ public class playercontroller : MonoBehaviour
 
 
     }
-    
 
+    public void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        if (_currentHealth <= 0)
+        {
+            _currentHealth = 0;
+        }
+    }
+
+    public void HealHealth(int heal)
+    {
+        _currentHealth += heal;
+        if (_currentHealth >= maxHealth) _currentHealth = maxHealth;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Spikes"))
+        {
+            TakeDamage(5);
+        }
+    }
 }

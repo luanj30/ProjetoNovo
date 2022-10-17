@@ -26,6 +26,10 @@ public class gamemanager : MonoBehaviour
 
     [SerializeField] private string guiScene;
 
+    [SerializeField] private GameModeso gameMode;
+
+    private float _currentTime;
+
     private void Awake()
     {
         if (Instance == null) 
@@ -37,6 +41,23 @@ public class gamemanager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void OnEnable()
+    {
+        PayerObserverManeger.OnPlayerCoinsChanged += OnPlayerConisChenged;
+        gameMode.OnGameStateGhanged += OnGameStateChenged;
+    }
+
+    private void OnGameStateChenged(GameState obj)
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        PayerObserverManeger.OnPlayerCoinsChanged -= OnPlayerConisChenged;
+        gameMode.OnGameStateGhanged -= OnGameStateChenged;
     }
 
     private void Start()
@@ -52,6 +73,16 @@ public class gamemanager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (gameState ==  GameState.Playing)
+        {
+            _currentTime += Time.deltaTime;
+            gameMode.UpdateGameState(intValue:0,_currentTime);
+            
+        }
+    }
+
     private void StartGameFromLevel()
     {
         SceneManager.LoadScene(guiScene, LoadSceneMode.Additive);
@@ -59,6 +90,8 @@ public class gamemanager : MonoBehaviour
 
         Instantiate(playerAndCameraPrefeb, starPosition, Quaternion.identity);
         gameState = GameState.Playing;
+        gameMode.InitializeMode();
+        _currentTime = 0;
     }
 
     // Start is called before the first frame update
@@ -96,6 +129,8 @@ public class gamemanager : MonoBehaviour
 
            Instantiate(playerAndCameraPrefeb, starPosition, Quaternion.identity);
        };
+       gameMode.InitializeMode();
+       _currentTime = 0;
     }
 
     public void CallVictory()
@@ -114,6 +149,30 @@ public class gamemanager : MonoBehaviour
     {
         SceneManager.LoadScene("Ending");
         gameState = GameState.Ending;
+    }
+
+    private void OnPlayerConisChenged(int obj)
+    {
+       gameMode.UpdateGameState(obj);
+       
+    }
+
+    private void OnGameStateChanged(GameState obj)
+    {
+        switch (obj)
+        {
+            case GameState.Victory:
+                CallVictory();
+                break;
+            case GameState.GameOver:
+                CallGameOver();
+                break;
+        }
+    }
+
+    public void PlayerReachfinishcube()
+    {
+        gameMode.UpdateGameState(intValue:0, floatValue:0, boolValue:true);
     }
 
    

@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Assets/GameMode/ColleCtCoins", fileName = "CollectCoinsGameMode")]
-public class CollectCoinsGameMode : ScriptableObject, IGameMode<int>
+public class CollectCoinsGameMode : GameModeso
 {
     public int coinsToWin;
-    public GameState gameState;
+
+    public float timeTowin;
     
-    
-    public void UpdateWinState(int value)
+    public override void UpdateGameState([Optional] int intValue, [Optional] float floatValue, [Optional] bool boolValue)
     {
-        
+        if (intValue >= coinsToWin) GameState = GameState.Victory;
+        if (floatValue >= timeTowin) GameState = GameState.GameOver;
     }
 }
